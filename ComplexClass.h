@@ -1,10 +1,16 @@
+#pragma once
+
 #include <cmath>
 #include <iostream>
+#include <type_traits>
+#include <stdexcept>
 
 
 template <typename T> class Complex {
 public:
-    Complex(T real, T imag) : real(real), imag(imag) {}
+    Complex(T real, T imag) : real(real), imag(imag) {
+        static_assert(std::is_arithmetic<T>::value, "Template type must be numeric");
+    }
 
     T getReal() const { return real; }
     void setReal(T real) { this->real = real; }
@@ -125,5 +131,3 @@ bool operator!=(const Complex<T>& a, const double& num) {
     return !(a == num);
 }
 
-
-#pragma once
