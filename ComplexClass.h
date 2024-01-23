@@ -4,6 +4,7 @@
 #include <iostream>
 #include <type_traits>
 #include <stdexcept>
+#include <sstream>
 
 
 template <typename T> class Complex {
@@ -44,6 +45,21 @@ public:
         T newReal = r * std::cos(exponent * arg);
         T newImag = r * std::sin(exponent * arg);
         return Complex<T>(newReal, newImag);
+    }
+
+    friend Complex<T> operator""_i(const char* literal) {
+        T real, imag;
+        char plusOrMinus;
+
+        std::stringstream ss(literal);
+        ss >> real >> plusOrMinus >> imag;
+
+        if (plusOrMinus == '+') {
+            return Complex<T>(real, imag);
+        } else if (plusOrMinus == '-') {
+            return Complex<T>(real, -imag);
+        } else {
+            throw std::invalid_argument("Invalid format for imaginary part in complex literal");
     }
 
     T getMod() const { return std::sqrt(real * real + imag * imag); }
